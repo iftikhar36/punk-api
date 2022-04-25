@@ -4,7 +4,6 @@ import s from "./styles.module.scss";
 
 function DataFetching() {
     const [beers, setBeers] = useState([]);
-    const [searchText,setSearchText] = useState("");
     const fetchBeers = () => {
         axios.get("https://api.punkapi.com/v2/beers/")
             .then((res) => {
@@ -15,18 +14,7 @@ function DataFetching() {
                 console.log(err);
             });
     }
-    const searchBeers = (searchText) =>{
-        if(searchText !== ""){
-            return fetch(`https://api.punkapi.com/v2/beers?beer_name=${searchText}`)
-                .then((res) =>{
-                    console.log(res)
-                    setBeers(res.data)
-                })
-                .catch(err =>{
-                    console.log(err);
-                })
-        }
-    }
+
     useEffect(() => {
         fetchBeers()
     }, [])
