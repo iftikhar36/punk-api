@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import s from "./styles.module.scss";
+import Search from "./search/Search";
 
-function DataFetching() {
+function DataFetching(props) {
     const [beers, setBeers] = useState([]);
+    const [searchText, setSearchText] = useState("")
     const fetchBeers = () => {
         axios.get("https://api.punkapi.com/v2/beers/")
             .then((res) => {
@@ -15,11 +17,23 @@ function DataFetching() {
             });
     }
 
+    const searchBeers = (searchText) =>{
+        if (searchText !== ""){
+            return axios.get(`https://api.punkapi.com/v2/beers?beer_name=${searchText}`)
+                .then((res) => {
+                    setBeers(res.data);
+                })
+        } else {
+            fetchBeers().then(beers =>setBeers(beers));
+        }
+    }
+
     useEffect(() => {
         fetchBeers()
     }, [])
     return (
         <div>
+            <Search setSearchText={setSearchText} searchBeers={searchBeers}/>
             <table className={s.table}>
                 <tbody>
                     {beers.map(beer => (
